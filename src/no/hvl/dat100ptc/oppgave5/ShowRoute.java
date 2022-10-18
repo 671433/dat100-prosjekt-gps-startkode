@@ -56,8 +56,16 @@ public class ShowRoute extends EasyGraphics {
 		double ystep;
 		
 		// TODO - START
+		double maxLat = GPSUtils.findMax(GPSUtils.getLatitudes(gpspoints));
+		double minLat = GPSUtils.findMin(GPSUtils.getLatitudes(gpspoints));
 		
-		throw new UnsupportedOperationException(TODO.method());
+		
+
+		 ystep = MAPXSIZE / (Math.abs(maxLat - minLat)); 
+
+		return ystep;
+		
+		//throw new UnsupportedOperationException(TODO.method());
 
 		// TODO - SLUTT
 		
@@ -66,8 +74,54 @@ public class ShowRoute extends EasyGraphics {
 	public void showRouteMap(int ybase) {
 
 		// TODO - START
+		double xstep = this.xstep();
+		double ystep = this.ystep();
 		
-		throw new UnsupportedOperationException(TODO.method());
+		double minstLong = GPSUtils.findMin(GPSUtils.getLatitudes(gpspoints));
+		double minstLat = GPSUtils.findMin(GPSUtils.getLatitudes(gpspoints));
+
+		
+		int pointsLength = gpspoints.length;
+		double[] longt = new double [pointsLength];
+		double[] latt = new double [pointsLength];
+		
+		for (int i =0; i<pointsLength;i++) {
+			longt [i]=gpspoints[i].getLongitude() - minstLong;
+		}
+		for (int i =0; i<pointsLength;i++) {
+			
+			latt[i]= gpspoints[i].getLatitude() -minstLat;
+			
+			int x = (int) (MARGIN + (longt[i] * xstep));
+			int y = (int) (ybase-(latt[i] * ystep));
+			
+			if (i == pointsLength) {
+				
+				setColor(0, 0, 255);
+				fillCircle(x, y, 5);
+			}else {
+				
+				int nestex = (int) (MARGIN + (longt[i] * xstep));
+				int nestey = (int) (ybase-(latt[i+1] * ystep));
+			
+			if (i==0) {
+				setColor(255, 0, 0);
+				fillCircle(x, y, 5);
+				drawLine(x, y, nestex, nestey);
+			}else {
+				
+				fillCircle(x, y, 3);
+				drawLine(x, y, nestex, nestey);
+			}
+			
+			}
+		}
+		
+		
+		
+		
+		
+		//throw new UnsupportedOperationException(TODO.method());
 		
 		// TODO - SLUTT
 	}
